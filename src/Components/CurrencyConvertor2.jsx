@@ -13,18 +13,20 @@ const [Result, setResult] = useState(null)
 
 
 useEffect(() => {
-  fetch("https://api.exchangerate-api.com/v4/latest/USD")
-     .then(res=>res.json())
-     .then(data=>setRates(data.rates))
-}, [])
+  fetch(`https://api.exchangerate-api.com/v4/latest/${FromCurrency}`)
+    .then(res => res.json())
+    .then(data => setRates(data.rates))
+    .catch(err => console.error("Error fetching rates:", err));
+}, [FromCurrency]);
 
 
-const handleConvertor=(e)=>{
-if(!Amount || ! Rates[ToCurrency]) return;
- e.preventDefault();
-const converted= Number( Amount )/ Rates[FromCurrency] * Rates[ToCurrency];
-setResult(converted);
-}
+
+const handleConvertor = (e) => {
+  e.preventDefault();
+  if (!Amount || !Rates[ToCurrency]) return;
+  const converted = Number(Amount) * Rates[ToCurrency];
+  setResult(converted.toFixed(2)); 
+};
 
 
 const handleSwap = () => {
